@@ -41,6 +41,13 @@ export const ShoppingCart = () => {
     }
     
 
+    // Calcular el total del carrito
+    const total = carrito.reduce((acc, id) => {
+        const prod = producto.find(p => p.id === id);
+        const unidades = count[id] || 0;
+        return acc + (prod ? prod.precio * unidades : 0);
+    }, 0);
+
     return(
         <div className="reto9">
             <div className="lista-carrito">
@@ -50,17 +57,21 @@ export const ShoppingCart = () => {
             <div className={agregado ? "agregado" : "agregar"} key={p.id}>
                         <h3>{p.nombre}</h3>
                         <p>{p.categoria}</p>
+                        <p>Precio: ${p.precio}</p>
                         <button onClick={() => toggleCarrito(p.id)}>
-                            {agregado ? "Agregado" : "Agregar"}
+                            {agregado ? "Eliminar" : "Agregar"}
                         </button>
                         <div className="cuenta">
                         <button onClick={()=> incrementar(p.id)}>+</button>
-                        <p>Unidades:{count[p.id]||0} </p>
+                        <p>Unidades: {count[p.id]||0} </p>
                         <button onClick={()=> decrementar(p.id)}>-</button>
                         </div>
                     </div>
                 )
             })}
+            </div>
+            <div className="total-carrito">
+                <h2>Total: ${total}</h2>
             </div>
         </div>
     )
